@@ -102,7 +102,7 @@ int main(void)
   MX_TIM3_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  own_main(huart2);
+  own_main(&huart2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
