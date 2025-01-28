@@ -1,1 +1,0 @@
-void own_main();
