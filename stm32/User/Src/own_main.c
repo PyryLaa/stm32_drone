@@ -28,6 +28,9 @@ void own_main(UART_HandleTypeDef* huart){
     		}
     		received = 0;
     		HAL_UART_Receive_IT(huart, &temp, 1);
+    		memset(recv_buf, '\0', sizeof recv_buf / sizeof recv_buf[0]);
+    		memset(final_buf, '\0', sizeof final_buf / sizeof final_buf[0]);
+
     	}
     }
 
