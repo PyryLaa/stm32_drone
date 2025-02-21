@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ArduinoJson.h>
 
 #ifndef APSSID
 #define APSSID "DroneESP"
@@ -12,6 +13,13 @@ const char *ssid = APSSID;
 const char *password = APPSK;
 
 ESP8266WebServer server(80);
+
+enum class Colors : int{
+  RED = 0,
+  BLUE,
+  GREEN,
+  ORANGE
+};
 
 const char htmlPage[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
@@ -53,33 +61,59 @@ const char htmlPage[] PROGMEM = R"rawliteral(
 */
 void handleRoot() {
   server.send(200, "text/html", htmlPage);
+  if(server.hasArg("value")){
+    //Serial.print(server.arg("value"));
+  }
 }
 
 void handleColor() {
+  /*
   if (server.hasArg("value")) {
       String color = server.arg("value");
       Serial.print("{" + color + "}");
       server.send(200, "text/plain", "Color received: " + color);
   } else {
       server.send(400, "text/plain", "Invalid request");
+  }*/
+  if(server.hasArg("plain")){
+    //Serial.println(server.arg("plain"));
+    JsonDocument j_req;
+    deserializeJson(j_req, server.arg("plain"));
+    Colors col_val = static_cast<Colors>(j_req["value"].as<int>());
+    switch(col_val){
+      case Colors::RED:
+        Serial.print("{red}");
+        break;
+      case Colors::BLUE:
+        Serial.print("{blue}");
+        break;
+      case Colors::GREEN:
+        Serial.print("{green}");
+        break;
+      case Colors::ORANGE:
+        Serial.print("{orange}");
+        break;
+      default:
+        break;
+    }
   }
 }
 
 void setup() {
   delay(1000);
   Serial.begin(115200);
-  Serial.println();
-  Serial.print("Configuring access point...");
+  //Serial.println();
+  //Serial.print("Configuring access point...");
   /* You can remove the password parameter if you want the AP to be open. */
   WiFi.softAP(ssid, password);
 
   IPAddress myIP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(myIP);
+  //Serial.print("AP IP address: ");
+  //Serial.println(myIP);
   server.on("/", handleRoot);
-  server.on("/led", handleColor);
+  server.on("/led", HTTP_POST,handleColor);
   server.begin();
-  Serial.println("HTTP server started");
+  //Serial.println("HTTP server started");
 }
 
 void loop() {
