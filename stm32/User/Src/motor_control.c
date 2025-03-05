@@ -18,6 +18,9 @@ void pwm_setup() {
 	TIM1->CCR4 = TIM_CH4_DEFAULT_CCR;
 }
 
+/**
+ * @brief Will start PWM generation on 4 TIM1 channels
+ */
 void start_motors() {
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
@@ -25,6 +28,13 @@ void start_motors() {
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 }
 
+/**
+ * @brief Changes the CCR value (duty cycle) of TIM1 channel 1
+ *
+ * @param[in] new_duty The value that will be written to CCRx to
+ * 			  achieve desired duty cycle. If less than set minimum,
+ * 			  minimum value will be written instead
+ */
 void motor1_pwm(uint16_t new_duty) {
 	if (new_duty < TIM_CH1_MIN_CCR) {
 		TIM1->CCR1 = TIM_CH1_MIN_CCR;
@@ -33,6 +43,13 @@ void motor1_pwm(uint16_t new_duty) {
 	}
 }
 
+/**
+ * @brief Changes the CCR value (duty cycle) of TIM1 channel 2
+ *
+ * @param[in] new_duty The value that will be written to CCRx to
+ * 			  achieve desired duty cycle. If less than set minimum,
+ * 			  minimum value will be written instead
+ */
 void motor2_pwm(uint16_t new_duty) {
 	if (new_duty < TIM_CH1_MIN_CCR) {
 		TIM1->CCR2 = TIM_CH1_MIN_CCR;
@@ -41,6 +58,13 @@ void motor2_pwm(uint16_t new_duty) {
 	}
 }
 
+/**
+ * @brief Changes the CCR value (duty cycle) of TIM1 channel 3
+ *
+ * @param[in] new_duty The value that will be written to CCRx to
+ * 			  achieve desired duty cycle. If less than set minimum,
+ * 			  minimum value will be written instead
+ */
 void motor3_pwm(uint16_t new_duty) {
 	if (new_duty < TIM_CH1_MIN_CCR) {
 		TIM1->CCR3 = TIM_CH1_MIN_CCR;
@@ -49,6 +73,13 @@ void motor3_pwm(uint16_t new_duty) {
 	}
 }
 
+/**
+ * @brief Changes the CCR value (duty cycle) of TIM1 channel 4
+ *
+ * @param[in] new_duty The value that will be written to CCRx to
+ * 			  achieve desired duty cycle. If less than set minimum,
+ * 			  minimum value will be written instead
+ */
 void motor4_pwm(uint16_t new_duty) {
 	if (new_duty < TIM_CH1_MIN_CCR) {
 		TIM1->CCR4 = TIM_CH1_MIN_CCR;

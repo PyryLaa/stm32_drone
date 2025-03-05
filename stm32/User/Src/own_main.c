@@ -10,12 +10,17 @@ int idx = 0;
 uint8_t received = 0;
 extern UART_HandleTypeDef huart2;
 
+
+/**
+ * @brief Own main function to keep user code separate from auto generated
+ */
 void own_main() {
 
 	// Initialize timer and start pwm to motors
 	pwm_setup();
 	start_motors();
 
+	// Communication code, will be moved and refactored later
 	HAL_UART_Receive_IT(&huart2, &temp, 1);
 	while (1) {
 		if (received == 1) {
@@ -33,10 +38,11 @@ void own_main() {
 				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
 			}
 			received = 0;
-			HAL_UART_Receive_IT(&huart2, &temp, 1);
+
+			// Clear the buffers and start receiving again
 			memset(recv_buf, '\0', sizeof recv_buf / sizeof recv_buf[0]);
 			memset(final_buf, '\0', sizeof final_buf / sizeof final_buf[0]);
-
+			HAL_UART_Receive_IT(&huart2, &temp, 1);
 		}
 	}
 
@@ -51,6 +57,8 @@ void own_main() {
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	if (temp == '}') {
+		/* Copy the end character '}' to receive buffer, then copy receive buffer to
+		   final buffer and null terminate it */
 		memcpy(recv_buf + idx, &temp, 1);
 		memcpy(final_buf, recv_buf, idx);
 		final_buf[idx + 1] = '\0';
