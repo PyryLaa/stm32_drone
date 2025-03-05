@@ -1,3 +1,6 @@
+#ifndef MOTOR_CONTROL_H
+#define MOTOR_CONTROL_H
+
 #include "own_main.h"
 
 // Timer 1 PWM register values
@@ -26,3 +29,5 @@ void motor1_pwm(uint16_t new_duty);
 void motor2_pwm(uint16_t new_duty);
 void motor3_pwm(uint16_t new_duty);
 void motor4_pwm(uint16_t new_duty);
+
+#endif // MOTOR_CONTROL_H
