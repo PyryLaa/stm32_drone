@@ -26,6 +26,15 @@ void start_motors() {
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+	calibrate_esc();
+}
+
+void calibrate_esc() {
+	TIM1->CCR1 = PWM_LOW_CYCLE_VAL;
+	HAL_Delay(2000);
+	TIM1->CCR1 = PWM_HIGH_CYCLE_VAL;
+	HAL_Delay(1000);
+	TIM1->CCR1 = 0;
 }
 
 /**

@@ -3,6 +3,7 @@
 
 #include "stm32f4xx.h"
 #include "comms.h"
+#include "lis_acc.h"
 
 void own_main();
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
