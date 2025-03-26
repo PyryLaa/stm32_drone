@@ -74,21 +74,21 @@
 
 // LIS data rate values
 #define LIS_DATARATE_PDOWN	0x00
-#define LIS_DATARATE_3		0x01
-#define LIS_DATARATE_6		0x02
-#define LIS_DATARATE_12		0x03
-#define LIS_DATARATE_25		0x04
-#define LIS_DATARATE_50		0x05
-#define LIS_DATARATE_100	0x06
-#define LIS_DATARATE_400	0x07
-#define LIS_DATARATE_800	0x08
-#define LIS_DATARATE_1600	0x09
+#define LIS_DATARATE_3		0x10
+#define LIS_DATARATE_6		0x20
+#define LIS_DATARATE_12		0x30
+#define LIS_DATARATE_25		0x40
+#define LIS_DATARATE_50		0x50
+#define LIS_DATARATE_100	0x60
+#define LIS_DATARATE_400	0x70
+#define LIS_DATARATE_800	0x80
+#define LIS_DATARATE_1600	0x90
 
 // LIS axis enable macros
 #define LIS_X_EN			0x01
 #define LIS_Y_EN			0x02
-#define LIS_Z_EN			0x03
-#define LIS_XYZ_EN			0x06
+#define LIS_Z_EN			0x04
+#define LIS_XYZ_EN			0x07
 
 
 #define LIS_DATAR_BIT_POS	0x04
@@ -105,10 +105,10 @@ typedef struct{
 
 extern SPI_HandleTypeDef hspi1;
 
-void LIS_init();
+void LIS_init(LIS_Init_typedef* lis_init);
 void LIS_write_data(uint8_t data, uint8_t addr);
-void LIS_read_data(uint8_t addr, uint8_t *buf, uint8_t size);
-uint16_t LIS_SPI_write(uint8_t data);
-uint16_t LIS_SPI_read(uint8_t addr);
+void LIS_read_data(uint8_t addr, uint8_t* buf, uint8_t size);
+void SPI_write(uint8_t* data, uint8_t size);
+void SPI_read(uint8_t* addr, uint8_t size);
 
 #endif /* INC_LIS_ACC_H_ */

@@ -1,6 +1,8 @@
 #include "comms.h"
 #include "main.h"
 #include <string.h>
+#include <stdlib.h>
+#include "motor_control.h"
 
 char recv_buf[128];
 char final_buf[128];
@@ -22,19 +24,9 @@ void init_comms() {
  */
 void message_arrived() {
 	if (received == 1) {
-		if (strcmp(final_buf + 1, "blue") == 0) {
-			GPIOD->ODR = 0;
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
-		} else if (strcmp(final_buf + 1, "red") == 0) {
-			GPIOD->ODR = 0;
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
-		} else if (strcmp(final_buf + 1, "orange") == 0) {
-			GPIOD->ODR = 0;
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
-		} else if (strcmp(final_buf + 1, "green") == 0) {
-			GPIOD->ODR = 0;
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
-		}
+		char* end;
+		uint8_t val = strtol(final_buf + 1, &end, 10);
+		motor1_pwm(val + MOTOR_PWM_CAL_VAL);
 		received = 0;
 
 		// Clear the buffers and start receiving again

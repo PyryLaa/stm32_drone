@@ -30,11 +30,10 @@ void start_motors() {
 }
 
 void calibrate_esc() {
-	TIM1->CCR1 = PWM_LOW_CYCLE_VAL;
-	HAL_Delay(2000);
 	TIM1->CCR1 = PWM_HIGH_CYCLE_VAL;
+	HAL_Delay(2000);
+	TIM1->CCR1 = PWM_LOW_CYCLE_VAL;
 	HAL_Delay(1000);
-	TIM1->CCR1 = 0;
 }
 
 /**

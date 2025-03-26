@@ -3,6 +3,8 @@
 
 #include "own_main.h"
 
+#define MOTOR_PWM_CAL_VAL	130
+
 extern UART_HandleTypeDef huart2;
 
 void init_comms();

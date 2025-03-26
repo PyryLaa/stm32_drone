@@ -67,53 +67,25 @@ void handleRoot() {
 }
 
 void handleColor() {
-  /*
-  if (server.hasArg("value")) {
-      String color = server.arg("value");
-      Serial.print("{" + color + "}");
-      server.send(200, "text/plain", "Color received: " + color);
-  } else {
-      server.send(400, "text/plain", "Invalid request");
-  }*/
   if(server.hasArg("plain")){
-    //Serial.println(server.arg("plain"));
     JsonDocument j_req;
     deserializeJson(j_req, server.arg("plain"));
-    Colors col_val = static_cast<Colors>(j_req["value"].as<int>());
-    switch(col_val){
-      case Colors::RED:
-        Serial.print("{red}");
-        break;
-      case Colors::BLUE:
-        Serial.print("{blue}");
-        break;
-      case Colors::GREEN:
-        Serial.print("{green}");
-        break;
-      case Colors::ORANGE:
-        Serial.print("{orange}");
-        break;
-      default:
-        break;
-    }
+    char buf[64];
+    sprintf(buf, "{%d}", j_req["value"].as<int>());
+    
+    Serial.print(buf);
   }
 }
 
 void setup() {
   delay(1000);
   Serial.begin(115200);
-  //Serial.println();
-  //Serial.print("Configuring access point...");
-  /* You can remove the password parameter if you want the AP to be open. */
   WiFi.softAP(ssid, password);
 
   IPAddress myIP = WiFi.softAPIP();
-  //Serial.print("AP IP address: ");
-  //Serial.println(myIP);
   server.on("/", handleRoot);
   server.on("/led", HTTP_POST,handleColor);
   server.begin();
-  //Serial.println("HTTP server started");
 }
 
 void loop() {

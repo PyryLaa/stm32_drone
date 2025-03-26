@@ -21,11 +21,12 @@ void own_main() {
 	// Initialize accelerometer
 	LIS_Init_typedef lis_init;
 	lis_init.axis_enable = LIS_XYZ_EN;
-	lis_init.datarate = LIS_DATARATE_800;
-	LIS_init();
+	lis_init.datarate = LIS_DATARATE_100;
+	LIS_init(&lis_init);
 	// Initialize timer and start pwm to motors
 	pwm_setup();
 	start_motors();
+	motor1_pwm(60);
 
 	// Communication code, will be moved and refactored later
 	//HAL_UART_Receive_IT(&huart2, &temp, 1);
