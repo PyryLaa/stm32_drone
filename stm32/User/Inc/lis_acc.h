@@ -110,5 +110,6 @@ void LIS_write_data(uint8_t data, uint8_t addr);
 void LIS_read_data(uint8_t addr, uint8_t* buf, uint8_t size);
 void SPI_write(uint8_t* data, uint8_t size);
 void SPI_read(uint8_t* addr, uint8_t size);
+void LIS_read_pitch_roll(float* buf, uint8_t size);
 
 #endif /* INC_LIS_ACC_H_ */

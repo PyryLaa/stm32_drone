@@ -30,7 +30,11 @@ void own_main() {
 
 	// Communication code, will be moved and refactored later
 	//HAL_UART_Receive_IT(&huart2, &temp, 1);
+	float degrees[] = {0, 0};
 	while (1) {
+		LIS_read_pitch_roll(degrees, sizeof degrees / sizeof degrees[0]);
+		float pitch = degrees[0], roll = degrees[1];
+		for(uint32_t i = 0; i < 0xFFFF; ++i);
 		/*if (received == 1) {
 		 if (strcmp(final_buf + 1, "blue") == 0) {
 		 GPIOD->ODR = 0;

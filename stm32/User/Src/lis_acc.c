@@ -1,5 +1,6 @@
 #include "lis_acc.h"
 #include "stm32f4xx.h"
+#include <math.h>
 
 uint8_t read_buf[2];
 uint8_t read_size = sizeof read_buf / sizeof read_buf[0];
@@ -57,4 +58,33 @@ void SPI_read(uint8_t* data, uint8_t size) {
 			*data++ = (SPI1->DR);
 			size--;
 	}
+}
+
+void LIS_read_pitch_roll(float* buf, uint8_t size){
+	if(size != 2){
+		return;
+	}
+	uint8_t xl_read_buf[1];
+	uint8_t xh_read_buf[1];
+	uint8_t yl_read_buf[1];
+	uint8_t yh_read_buf[1];
+	uint8_t zl_read_buf[1];
+	uint8_t zh_read_buf[1];
+	float acc_g = 0.00006;
+	uint8_t read_size = 1;
+
+	LIS_read_data(LIS_OUT_X_L_REG, xl_read_buf, read_size);
+	LIS_read_data(LIS_OUT_X_H_REG, xh_read_buf, read_size);
+	LIS_read_data(LIS_OUT_Y_L_REG, yl_read_buf, read_size);
+	LIS_read_data(LIS_OUT_Y_H_REG, yh_read_buf, read_size);
+	LIS_read_data(LIS_OUT_Z_L_REG, zl_read_buf, read_size);
+	LIS_read_data(LIS_OUT_Z_H_REG, zh_read_buf, read_size);
+	int16_t x_val = (xh_read_buf[0] << 8) | (xl_read_buf[0]);
+	int16_t y_val = (yh_read_buf[0] << 8) | (yl_read_buf[0]);
+	int16_t z_val = (zh_read_buf[0] << 8) | (zl_read_buf[0]);
+	float ax = x_val * acc_g;
+	float ay = y_val * acc_g;
+	float az = z_val * acc_g;
+	buf[0] = atan2(ax, sqrt(ay*ay + az*az)) * 180.0f / M_PI;
+	buf[1] = atan2(ay, sqrt(ax*ax + az*az)) *  180.0f / M_PI;
 }
