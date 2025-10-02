@@ -26,15 +26,18 @@ void start_motors() {
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
-	calibrate_esc();
+	//TIM1->CCR1 = PWM_HIGH_CYCLE_VAL;
+	//calibrate_esc();
 }
 
-void calibrate_esc() {
-	TIM1->CCR1 = PWM_HIGH_CYCLE_VAL;
-	HAL_Delay(2000);
+/*void calibrate_esc() {
+	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+	HAL_Delay(4000);
 	TIM1->CCR1 = PWM_LOW_CYCLE_VAL;
-	HAL_Delay(1000);
-}
+	HAL_Delay(2000);
+	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+	TIM1->CCR1 = PWM_HIGH_CYCLE_VAL - 25;
+}*/
 
 /**
  * @brief Changes the CCR value (duty cycle) of TIM1 channel 1
