@@ -27,6 +27,9 @@ void message_arrived() {
 		char* end;
 		uint8_t val = strtol(final_buf + 1, &end, 10);
 		motor1_pwm(val + MOTOR_PWM_CAL_VAL);
+		motor2_pwm(val + MOTOR_PWM_CAL_VAL);
+		motor3_pwm(val + MOTOR_PWM_CAL_VAL);
+		motor4_pwm(val + MOTOR_PWM_CAL_VAL);
 		received = 0;
 
 		// Clear the buffers and start receiving again

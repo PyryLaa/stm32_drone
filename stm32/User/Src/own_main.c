@@ -21,6 +21,9 @@ void own_main() {
 	pwm_setup();
 	start_motors();
 	motor1_pwm(60);
+	motor2_pwm(60);
+	motor3_pwm(60);
+	motor4_pwm(60);
 
 	float degrees[] = {0, 0};
 	while (1) {
