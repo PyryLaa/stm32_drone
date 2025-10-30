@@ -20,10 +20,10 @@ void own_main() {
 	// Initialize timer and start pwm to motors
 	pwm_setup();
 	start_motors();
-	motor1_pwm(60);
-	motor2_pwm(60);
-	motor3_pwm(60);
-	motor4_pwm(60);
+	motor1_pwm(100);
+	motor2_pwm(100);
+	motor3_pwm(100);
+	motor4_pwm(100);
 
 	float degrees[] = {0, 0};
 	while (1) {
