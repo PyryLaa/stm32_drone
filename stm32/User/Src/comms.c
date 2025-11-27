@@ -9,6 +9,7 @@ char final_buf[128];
 uint8_t temp;
 int idx = 0;
 uint8_t received = 0;
+extern uint8_t user_throttle_percent;
 
 /**
  * @brief Clears communication buffers and starts receiving in UART interrupt mode
@@ -26,12 +27,8 @@ void message_arrived() {
 	if (received == 1) {
 		char* end;
 		uint8_t val = strtol(final_buf + 1, &end, 10);
-		motor1_pwm(val + MOTOR_PWM_CAL_VAL);
-		motor2_pwm(val + MOTOR_PWM_CAL_VAL);
-		motor3_pwm(val + MOTOR_PWM_CAL_VAL);
-		motor4_pwm(val + MOTOR_PWM_CAL_VAL);
 		received = 0;
-
+		user_throttle_percent = val;
 		// Clear the buffers and start receiving again
 		memset(recv_buf, '\0', sizeof recv_buf / sizeof recv_buf[0]);
 		memset(final_buf, '\0', sizeof final_buf / sizeof final_buf[0]);

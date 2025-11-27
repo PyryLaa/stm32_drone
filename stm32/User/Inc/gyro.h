@@ -10,7 +10,7 @@
 
 #include "main.h"
 
-#define IAM_GYRO_DEV_ADDR			0x68
+#define IAM_GYRO_DEV_ADDR			0x69
 #define IAM_WHOAMI_VALUE			0xFD
 // Register definitions
 #define IAM_SELF_TEST_X_GYRO_REG	0x00
@@ -49,11 +49,12 @@
 #define IAM_FIFO_R_W_REG			0X74
 #define IAM_WHO_AM_I_REG			0X75
 
-extern I2C_HandleTypeDef i2c1;
 
-void i2c_read(uint16_t dev_ddr, uint8_t* addr_buf, uint8_t* recv_buf, I2C_HandleTypeDef* hi2c);
-void i2c_write(uint8_t addr, uint8_t* buf, I2C_HandleTypeDef* hi2c);
+
+HAL_StatusTypeDef i2c_read(uint16_t dev_ddr, uint8_t* addr_buf, uint8_t* recv_buf, I2C_HandleTypeDef* hi2c);
+HAL_StatusTypeDef i2c_write(uint8_t addr, uint8_t* buf, I2C_HandleTypeDef* hi2c);
 void gyro_setup();
+void gyro_read(float* x, float* y, float* z, I2C_HandleTypeDef* hi2c);
 
 #endif /* INC_GYRO_H_ */
 

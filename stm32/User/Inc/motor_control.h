@@ -13,6 +13,14 @@
 #define TIM_CH3_MIN_CCR 100
 #define TIM_CH4_MIN_CCR 100
 
+// Maximum CCR values
+#define TIM_CH1_MAX_CCR 200
+#define TIM_CH2_MAX_CCR 200
+#define TIM_CH3_MAX_CCR 200
+#define TIM_CH4_MAX_CCR 200
+
+#define MIN_CCR			100
+#define MAX_CCR			200
 // Default CCR register values, adjusted as needed
 #define TIM_CH1_DEFAULT_CCR TIM_CH1_MIN_CCR
 #define TIM_CH2_DEFAULT_CCR TIM_CH2_MIN_CCR

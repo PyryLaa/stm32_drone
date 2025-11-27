@@ -60,6 +60,12 @@ void SPI_read(uint8_t* data, uint8_t size) {
 	}
 }
 
+/**
+ * Reads x, y and z data from accelerometer and transforms them into pitch and roll values
+ *
+ * @param[out] buf Pointer to buffer where pitch and roll will be written
+ * @param[in] size Size of buf
+ */
 void LIS_read_pitch_roll(float* buf, uint8_t size){
 	if(size != 2){
 		return;
