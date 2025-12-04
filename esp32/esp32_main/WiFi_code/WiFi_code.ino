@@ -28,41 +28,6 @@ enum class Colors : int{
   ORANGE
 };
 
-const char htmlPage[] PROGMEM = R"rawliteral(
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP8266 Color Input</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        input { padding: 10px; font-size: 16px; }
-        button { padding: 10px 20px; font-size: 16px; margin-left: 10px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <h2>Enter a Color (red, blue, green, orange)</h2>
-    <input type="text" id="colorInput" placeholder="Type a color">
-    <button onclick="sendColor()">Submit</button>
-
-    <script>
-        function sendColor() {
-            let color = document.getElementById('colorInput').value.toLowerCase();
-            if (['red', 'blue', 'green', 'orange'].includes(color)) {
-                fetch('/led?value=' + color)
-                    .then(response => response.text())
-                    .then(data => alert(data))
-                    .catch(error => console.error('Error:', error));
-            } else {
-                alert('Invalid color! Please enter red, blue, green, or orange.');
-            }
-        }
-    </script>
-</body>
-</html>
-)rawliteral";
-
 void sendValStm(char* val){
     Serial.print(val);
 }
@@ -88,15 +53,11 @@ void onStationDisconnected(const WiFiEventSoftAPModeStationDisconnected& event){
   Serial.println("Device disconnect with mac: ");
   printMac(event.mac);
   if(memcmp(event.mac, connectedDeviceMac, MAC_LENGTH) == 0){
-    char buf[] = "{100}";
+    char buf[] = "{0}";
     sendValStm(buf);
     deviceConnected = false;
     memset(connectedDeviceMac, 0, MAC_LENGTH);
   }
-}
-
-void handleRoot() {
-  server.send(200, "text/html", htmlPage);
 }
 
 void handleValue() {
@@ -105,7 +66,7 @@ void handleValue() {
     deserializeJson(j_req, server.arg("plain"));
     char buf[64];
     int val = j_req["value"].as<int>();
-    if(100 <= val <= 200){
+    if(val <= 100){
       sprintf(buf, "{%d}", val);
       sendValStm(buf);
     }
@@ -120,7 +81,6 @@ void setup() {
   disconnectHandler = WiFi.onSoftAPModeStationDisconnected(&onStationDisconnected);
 
   IPAddress myIP = WiFi.softAPIP();
-  server.on("/", handleRoot);
   server.on("/led", HTTP_POST,handleValue);
   server.begin();
 }

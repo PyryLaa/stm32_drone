@@ -28,6 +28,9 @@ void message_arrived() {
 		char* end;
 		uint8_t val = strtol(final_buf + 1, &end, 10);
 		received = 0;
+		if(val < 10){
+			user_throttle_percent = 0;
+		}
 		user_throttle_percent = val;
 		// Clear the buffers and start receiving again
 		memset(recv_buf, '\0', sizeof recv_buf / sizeof recv_buf[0]);
