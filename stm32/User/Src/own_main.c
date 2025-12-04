@@ -11,6 +11,7 @@ float gyro_x = 0, gyro_y = 0, gyro_z = 0;
 float real_pitch = 0, real_roll = 0, gyro_roll = 0, gyro_pitch = 0;
 uint8_t user_throttle_percent = 0;
 uint8_t pid_counter = 0;
+float initial_acc_pitch = 0.0, initial_acc_roll = 0.0, initial_gyro_x = 0.0, initial_gyro_y = 0.0, initial_gyro_z = 0.0;
 /**
  * @brief Own main function to keep user code separate from auto generated
  */
@@ -40,20 +41,21 @@ void own_main() {
 	PID_Data_t pid_pitch = { .kp = 2.0f, .ki = 0.0f, .kd = 0.8f };
 	PID_Data_t pid_roll  = { .kp = 2.0f, .ki = 0.0f, .kd = 0.8f };
 	float base = 130;
+	read_initial_values();
 	while (1) {
 		// Base value that would be written to CCR registers, will be modified with pid
 		if(user_throttle_percent > 10){
 			base = MIN_CCR + (user_throttle_percent / 100.0f) * (MAX_CCR - MIN_CCR);
 			LIS_read_pitch_roll(degrees, sizeof degrees / sizeof degrees[0]);
 			gyro_read(&gyro_x, &gyro_y, &gyro_z, &hi2c1);
-			float acc_pitch = degrees[0], acc_roll = degrees[1];
+			float acc_pitch = degrees[0] - initial_acc_pitch, acc_roll = degrees[1] - initial_acc_roll;
 			uint32_t now = HAL_GetTick();
 			dt = (now - last_time) / 1000.0f;
 			last_time = now;
 
 			// Integrate gyro
-			gyro_roll = real_roll + gyro_y * dt;
-			gyro_pitch = real_pitch + gyro_x * dt;
+			gyro_roll = real_roll + (gyro_y - initial_gyro_y) * dt;
+			gyro_pitch = real_pitch + (gyro_x - initial_gyro_x) * dt;
 
 			// Filter
 			real_pitch = alpha * gyro_pitch + (1.0f - alpha) * acc_pitch;
@@ -89,4 +91,12 @@ void own_main() {
 
 	}
 
+}
+
+void read_initial_values(){
+	float buf[] = {0.0, 0.0};
+	LIS_read_pitch_roll(buf, sizeof buf / sizeof buf[0]);
+
+	gyro_read(&initial_gyro_x, &initial_gyro_y, &initial_gyro_z, &hi2c1);
+	initial_acc_pitch = buf[0], initial_acc_roll = buf[1];
 }

@@ -6,5 +6,6 @@
 #include "lis_acc.h"
 
 void own_main();
+void read_initial_values();
 
 #endif //OWN_MAIN_H
